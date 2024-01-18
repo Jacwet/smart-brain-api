@@ -1,22 +1,22 @@
 const express = require('express');
-const bodyParser = require('body-parser'); // latest version of exressJS now comes with Body-Parser!
+const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
-
+require("dotenv").config();
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
+
 const db = knex({
-  // connect to your own database here:
   client: 'pg',
   connection: {
-    host : '127.0.0.1',
-    user : 'aneagoie',
-    password : '',
-    database : 'smart-brain'
+    port: 5432,
+    host : 'localhost',
+    user: 'postgres',
+    password : process.env.PASSWORD,
   }
 });
 
@@ -24,7 +24,7 @@ const app = express();
 
 
 app.use(cors())
-app.use(express.json()); // latest version of exressJS now comes with Body-Parser!
+app.use(express.json()); 
 
 app.get('/', (req, res)=> { res.send(db.users) })
 app.post('/signin', signin.handleSignin(db, bcrypt))
@@ -35,4 +35,5 @@ app.post('/imageurl', (req, res) => { image.handleApiCall(req, res)})
 
 app.listen(3000, ()=> {
   console.log('app is running on port 3000');
+
 })
