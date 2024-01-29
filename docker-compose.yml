@@ -1,32 +1,36 @@
 version: "3.8"
 
 services:
-  app:
-    image: smart-brain-api
+  smart-brain-api:
+    container_name: backend
+    build: ./
+    command: npm start
+    working_dir: /urs/src/smart-brain-api
+    environment:
+      POSTGRES_USER: jackie
+      POSTGRES_PASSWORD: Levalife2021
+      POSTGRES_DB: smart-brain_docker
+      POSTGRES_PORT: postgres
+
+    links:
+      - postgres 
     ports:
-      - 3333:3000
+      - "3000:3000"
+    volumes:
+      - ./:/urs/src/smart-brain-api
 
   postgres:
+    container_name: postgres
     image: postgres
     environment:
-      POSTGRES_PASSWORD: password123
-      POSTGRES_USER: user123
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      POSTGRES_USER: jackie
+      POSTGRES_PASSWORD: Levalife2021
+      POSTGRES_DB: smart-brain_docker
+      POSTGRES_PORT: postgres
     ports:
       - "5432:5432"
-    restart: unless-stopped
-    volumes:
-      - data:/var/lib/postgresql/data
 
-  pg-admin:
 
-    image: dpage/pgadmin4:latest
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.com
-      PGADMIN_DEFAULT_PASSWORD: password
-    ports:
-      - "5050:80"
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    depends_on:
-      - postgres
 
+    
