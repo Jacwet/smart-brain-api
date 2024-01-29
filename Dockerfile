@@ -1,9 +1,12 @@
 FROM node:20.9.0
 
-WORKDIR /usr/src/smart-brain-api
+WORKDIR /usr/src/app
 
-COPY ./ ./
-
+COPY package.json ./
 RUN  npm install
 
-CMD ["/bin/bash"]
+COPY . .
+
+EXPOSE 3000
+CMD ["npm", "run", "dev"]
+
